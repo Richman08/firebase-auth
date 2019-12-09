@@ -1,0 +1,45 @@
+<mat-card class="login__wrapper">
+  <h3>Please login to continue</h3>
+
+  <form [formGroup]="loginForm"
+        (ngSubmit)="onSubmit(loginForm)"
+        class="login__login-form">
+    <mat-form-field class="login__input-field">
+      <input matInput
+             type="email"
+             placeholder="Enter your email"
+             formControlName="email"
+             required>
+      <mat-error *ngIf="loginForm.invalid">
+        Enter correct email
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field class="login__input-field">
+      <input matInput
+             #password
+             type="password"
+             placeholder="Enter your password"
+             formControlName="password"
+             required>
+      <mat-error *ngIf="loginForm.controls.password.invalid">
+        Enter correct password
+      </mat-error>
+    </mat-form-field>
+    <button mat-raised-button
+            type="submit"
+            [disabled]="!loginForm.valid"
+            class="login__signin-btn">
+      Log in
+    </button>
+  </form>
+  <div class="login__social-login-btn-block">
+    <button mat-raised-button
+            (click)="authService.googleSignin()"
+            class="login__signin-social-btn">
+      Login with Google
+    </button>
+  </div>
+  <div class="login__signup-btn">
+    <a routerLink="/signup" class="signup-link">Sign up</a>
+  </div>
+</mat-card>

@@ -2,21 +2,28 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MaterialModule} from './shared/modules/material.module';
 import {HttpClientModule} from '@angular/common/http';
+import {environment} from '../environments/environment';
+import {AngularFireModule} from '@angular/fire';
+import {AngularFireAuthModule} from '@angular/fire/auth';
+import {AngularFirestoreModule} from '@angular/fire/firestore';
+
+import { AppComponent } from './app.component';
 import { HomeComponent } from './components/home/home.component';
-import { HeaderComponent } from './shared/components/header/header.component';
-import { LoginComponent } from './shared/components/login/login.component';
+import { LoginComponent } from './components/login/login.component';
+import {AuthGuard} from './shared/guards/auth.guard';
+import { SignupComponent } from './components/signup/signup.component';
+
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
-    HeaderComponent,
-    LoginComponent
+    LoginComponent,
+    SignupComponent,
   ],
   imports: [
     BrowserModule,
@@ -25,9 +32,12 @@ import { LoginComponent } from './shared/components/login/login.component';
     FormsModule,
     ReactiveFormsModule,
     MaterialModule,
-    HttpClientModule
+    HttpClientModule,
+    AngularFireModule.initializeApp(environment.firebaseConfig, 'fb-auth-test'),
+    AngularFireAuthModule,
+    AngularFirestoreModule,
   ],
-  providers: [],
+  providers: [AuthGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

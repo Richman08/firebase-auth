@@ -1,0 +1,35 @@
+<mat-card class="signup__wrapper">
+  <h3>Please register</h3>
+
+  <form [formGroup]="signupForm"
+        (ngSubmit)="onSubmit(signupForm)"
+        class="signup__signup-form">
+    <mat-form-field class="signup__input-field">
+      <input matInput
+             type="email"
+             placeholder="Enter your email"
+             formControlName="email"
+             required>
+    </mat-form-field>
+    <mat-error class="signup__error"
+               *ngIf="error">
+      {{ error.message }}
+    </mat-error>
+    <mat-form-field class="signup__input-field">
+      <input matInput
+             type="password"
+             placeholder="Enter your password"
+             formControlName="password"
+             required>
+      <mat-error *ngIf="signupForm.controls.password.invalid">
+        Enter minimum 6 characters
+      </mat-error>
+    </mat-form-field>
+    <button mat-raised-button
+            type="submit"
+            [disabled]="!signupForm.valid"
+            class="signup__signup-btn">
+      Sign Up
+    </button>
+  </form>
+</mat-card>
