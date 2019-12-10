@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {Observable, of} from 'rxjs';
+import {Observable} from 'rxjs';
 import {IUser} from '../../interfaces/user.interface';
 import {AngularFireAuth} from '@angular/fire/auth';
 import {AngularFirestore} from '@angular/fire/firestore';
@@ -22,6 +22,7 @@ export class AuthService {
   async googleSignin() {
     const provider = new auth.GoogleAuthProvider();
     await this.afAuth.auth.signInWithPopup(provider);
+    await this.router.navigate(['/home']);
   }
 
   async signOut() {

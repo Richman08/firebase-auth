@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef} from '@angular/core';
 import {Router} from '@angular/router';
 import {AngularFireAuth, AngularFireAuthModule} from '@angular/fire/auth';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
@@ -18,10 +18,11 @@ export class LoginComponent implements OnInit {
   constructor(private fb: FormBuilder,
               private authService: AuthService,
               public afAuth: AngularFireAuth,
-              private router: Router) {
+              private router: Router,
+              private cdRef: ChangeDetectorRef) {
     this.afAuth.authState.subscribe(auth => {
       if (auth) {
-        this.router.navigate(['/home']);
+        this.router.navigate(['/login']);
       }
     });
   }
@@ -30,12 +31,12 @@ export class LoginComponent implements OnInit {
     this.initLoginForm();
   }
 
-  initLoginForm() {
+  initLoginForm(): void {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required,
-                   Validators.pattern(/^([a-zA-Z0-9][a-zA-Z0-9_.+-]{0,63})@([a-zA-Z0-9][a-zA-Z0-9-]{0,253})\.([a-zA-Z0-9-.]{2,6})+$/)]],
+        Validators.pattern(/^([a-zA-Z0-9][a-zA-Z0-9_.+-]{0,63})@([a-zA-Z0-9][a-zA-Z0-9-]{0,253})\.([a-zA-Z0-9-.]{2,6})+$/)]],
       password: ['', [Validators.required,
-                      Validators.pattern(/^([a-zA-Z0-9_-]{5,16})+$/)]]
+        Validators.pattern(/^([a-zA-Z0-9_-]{5,16})+$/)]]
     });
   }
 
@@ -43,9 +44,12 @@ export class LoginComponent implements OnInit {
     if (data.valid) {
       this.afAuth.auth.signInWithEmailAndPassword(data.value.email, data.value.password)
         .then(
-        (success) => {
-          this.router.navigate(['/home']);
-        }).catch( err => this.error = err);
+          (success) => {
+            this.router.navigate(['/home']);
+          }).catch(err => {
+        this.error = err;
+        this.cdRef.detectChanges();
+      });
     }
   }
 }

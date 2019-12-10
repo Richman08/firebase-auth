@@ -19,13 +19,14 @@ export class SignupComponent implements OnInit {
               private authService: AuthService,
               public afAuth: AngularFireAuth,
               private router: Router,
-              private cdRef: ChangeDetectorRef) { }
+              private cdRef: ChangeDetectorRef) {
+  }
 
   ngOnInit() {
     this.initSignupForm();
   }
 
-  initSignupForm() {
+  initSignupForm(): void {
     this.signupForm = this.fb.group({
       email: ['', [Validators.required,
         Validators.pattern(/^([a-zA-Z0-9][a-zA-Z0-9_.+-]{0,63})@([a-zA-Z0-9][a-zA-Z0-9-]{0,253})\.([a-zA-Z0-9-.]{2,6})+$/)]],
@@ -36,14 +37,14 @@ export class SignupComponent implements OnInit {
 
   onSubmit(data) {
     if (data.valid) {
-      this.afAuth.auth.createUserWithEmailAndPassword(data.value.email, data.value.password).then(
-        (success) => {
-          this.router.navigate(['/login']);
-        }).catch( err => {
+      this.afAuth.auth.createUserWithEmailAndPassword(data.value.email, data.value.password)
+        .then(
+          (success) => {
+            this.router.navigate(['/login']);
+          }).catch(err => {
         this.error = err;
         this.cdRef.detectChanges();
       });
     }
   }
-
 }
